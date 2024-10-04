@@ -1,9 +1,22 @@
 #!/bin/bash
 
-# Variables
+APPPATH=/opt/containers/parsedmarc-docker/parsedmarc/conf
+FILE=parsedmarc.ini
+
+echo "Check if the file $FILE already exist.";
+if [ ! -f $APPPATH/$FILE ]; then
+    echo "File $FILE was created successfully.";
+    echo
+    /bin/cp $APPPATH/parsedmarc.ini.example $APPPATH/$FILE
+else
+    echo "File $FILE already exist!";
+    echo
+fi
+
+######
+
 APPPATH=/opt/containers/parsedmarc-docker
 FILE=.env
-
 
 echo "Check if the file .env already exist.";
 if [ ! -f $APPPATH/$FILE ]; then
@@ -14,6 +27,7 @@ else
     exit 0
 fi
 
+######
 
 echo "Set random password for the user elastic.";
 password=$(/bin/tr -dc 'A-Za-z0-9!?%=' < /dev/urandom | /bin/head -c 20)
