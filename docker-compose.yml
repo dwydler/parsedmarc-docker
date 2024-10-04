@@ -1,0 +1,165 @@
+version: '3.9'
+
+services:
+  setup:
+    container_name: epk-setup
+    image: "wydler/parsedmarc-utils:${DH_CONTAINER_TAG}"
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - KIBANA_PASSWORD=${KIBANA_PASSWORD}
+    volumes:
+      - "./kibana/dashboard/:/usr/share/kibana/dashboards:ro"
+    command:
+      - bash
+      - -c
+      - |
+        echo "Waiting for Elasticsearch availability.";
+        until curl -s "http://elasticsearch:9200" | grep -q "missing authentication credentials"; do sleep 30; done;
+       
+        echo "Setting kibana_system password.";
+        until curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" "http://elasticsearch:9200/_security/user/kibana_system/_password" -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
+        
+        echo "Create new role names parsedmarc.";
+        curl  -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://elasticsearch:9200/_security/role/parsedmarc" -H "Content-Type: application/json" -d "{\"description\": \"Grants full access to all parsedmarc Indices.\",\"indices\": [{\"names\":[ \"smtp_tls*\", \"dmarc_aggregate*\", \"dmarc_forensic*\" ],\"privileges\":[\"all\"]}]}"
+        
+        echo "Create service account parsemdarc.";
+        curl  -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://elasticsearch:9200/_security/user/parsedmarc" -H "Content-Type: application/json" -d "{\"password\" : \"${PARSEDMARC_PASSWORD}\",\"roles\" : [ \"parsedmarc\" ],\"full_name\" : \"Service Account für parsedmarc\"}"
+        
+
+        echo "Waiting for Kibana availability.";
+        until curl -s -I "http://epk-kibana:5601" | grep -q "HTTP/1.1 302 Found"; do sleep 30; done;
+
+        echo "Import parsemarc Dashboards.";
+        curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://kibana:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" -H "securitytenant: global" --form "file=@/usr/share/kibana/dashboards/export.ndjson";
+
+        echo "All done!";
+    networks:
+      - parsedmarc-network
+
+
+  elasticsearch:
+    container_name: "epk-elasticsearch"
+    image: "wydler/parsedmarc-elasticsearch:${DH_CONTAINER_TAG}"
+    restart: "unless-stopped"
+    environment:
+      - cluster.name=parsedmarc
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - xpack.security.http.ssl.enabled=false
+    volumes:
+      - ./elasticsearch/data/:/usr/share/elasticsearch/data/:rw
+    networks:
+      - parsedmarc-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s http://localhost:9200 | grep -q 'missing authentication credentials'",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+
+  kibana:
+    container_name: "epk-kibana"
+    image: "wydler/parsedmarc-kibana:${DH_CONTAINER_TAG}"
+    restart: unless-stopped
+    environment:
+      - SERVER_NAME=parsedmarc
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - TELEMETRY_ENABLED=false
+    networks:
+      - parsedmarc-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1'",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+
+  nginx:
+    container_name: "epk-nginx"
+    image: "wydler/parsedmarc-nginx:${DH_CONTAINER_TAG}"
+    restart: unless-stopped
+    environment:
+      - ServerName=${ServerFqdn}
+    volumes:
+      - "./nginx/templates/:/etc/nginx/templates/:ro"
+      - "./nginx/conf/.htpasswd:/etc/nginx/.htpasswd:rw"
+      - "./nginx/certbot/www/:/var/www/certbot/:rw"
+      - "./nginx/certbot/ssl/:/etc/letsencrypt/:rw"
+      - "./nginx/certbot/log/:/var/log/letsencrypt/:rw"
+    networks:
+      - parsedmarc-network
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - .env
+    healthcheck:
+      test: service nginx status || exit 1
+      timeout: 10s
+    depends_on:
+      kibana:
+        condition: service_healthy
+
+
+  parsedmarc:
+    container_name: "epk-parsedmarc"
+    image: "wydler/parsedmarc-app:${DH_CONTAINER_TAG}"
+    restart: unless-stopped
+    volumes:
+      - "./parsedmarc/conf/parsedmarc.ini:/etc/parsedmarc.ini:ro"
+      - "./parsedmarc/log/:/var/log/parsedmarc/:rw"
+      - "./geoipupdate/data/files:/usr/share/GeoIP/:ro"
+    command: parsedmarc -c /etc/parsedmarc.ini --debug
+    networks:
+      - parsedmarc-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pgrep -x parsedmarc || exit 1",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      geoipupdate:
+        condition: service_healthy
+
+
+  geoipupdate:
+    container_name: "epk-geoipupdate"
+    image: "wydler/parsedmarc-geoipupdate:${DH_CONTAINER_TAG}"
+    restart: unless-stopped
+    environment:
+      - GEOIPUPDATE_ACCOUNT_ID=${GEOIPUPDATE_ACCOUNT_ID}
+      - GEOIPUPDATE_LICENSE_KEY=${GEOIPUPDATE_LICENSE_KEY}
+      - GEOIPUPDATE_EDITION_IDS=${GEOIPUPDATE_EDITION_IDS}
+      - GEOIPUPDATE_FREQUENCY=${GEOIPUPDATE_FREQUENCY}
+    networks:
+      - parsedmarc-network
+    volumes:
+      - "./geoipupdate/data:/usr/share/GeoIP:rw"
+
+
+
+networks:
+    parsedmarc-network:
+      driver: bridge
