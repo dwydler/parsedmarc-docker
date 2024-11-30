@@ -42,5 +42,25 @@ password=$(/bin/tr -dc 'A-Za-z0-9!?=' < /dev/urandom | /bin/head -c 20)
 /bin/sed -i 's/<your-parsedmarc-password>/'$password'/g' /$APPPATH/$FILE
 /bin/sed -i 's/<your-parsedmarc-password>/'$password'/g' /$APPPATH/parsedmarc/conf/parsedmarc.ini
 
+
+######
+echo "create logrotate config file.";
+cat << \EOF > /etc/logrotate.d/parsedmarc
+/opt/containers/parsedmarc-docker/parsedmarc/log/*.log {
+    rotate 31
+    daily
+    compress
+    missingok
+    delaycompress
+    dateext
+    sharedscripts
+    postrotate
+      cd /opt/containers/parsedmarc-docker \
+        && /usr//bin/docker compose restart parsedmarc
+    endscript
+}
+EOF
+
+
 echo
 echo "The script has reached the end.";
