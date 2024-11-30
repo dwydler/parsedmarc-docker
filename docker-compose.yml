@@ -8,6 +8,10 @@ services:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - KIBANA_PASSWORD=${KIBANA_PASSWORD}
     volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      
       - "./kibana/dashboard/:/usr/share/kibana/dashboards:ro"
     command:
       - bash
@@ -49,7 +53,11 @@ services:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - xpack.security.http.ssl.enabled=false
     volumes:
-      - ./elasticsearch/data/:/usr/share/elasticsearch/data/:rw
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      
+      - "./elasticsearch/data/:/usr/share/elasticsearch/data/:rw"
     networks:
       - parsedmarc-network
     healthcheck:
@@ -97,6 +105,10 @@ services:
     environment:
       - ServerName=${ServerFqdn}
     volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      
       - "./nginx/templates/:/etc/nginx/templates/:ro"
       - "./nginx/conf/.htpasswd:/etc/nginx/.htpasswd:rw"
       - "./nginx/certbot/www/:/var/www/certbot/:rw"
@@ -122,6 +134,10 @@ services:
     image: "wydler/parsedmarc-app:${DH_CONTAINER_TAG}"
     restart: unless-stopped
     volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    
       - "./parsedmarc/conf/parsedmarc.ini:/etc/parsedmarc.ini:ro"
       - "./parsedmarc/log/:/var/log/parsedmarc/:rw"
       - "./geoipupdate/data/files:/usr/share/GeoIP/:ro"
@@ -156,6 +172,10 @@ services:
     networks:
       - parsedmarc-network
     volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    
       - "./geoipupdate/data:/usr/share/GeoIP:rw"
 
 
