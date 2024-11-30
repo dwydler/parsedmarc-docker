@@ -69,7 +69,7 @@ if [[ "$COPIEDFILES" -eq "3" ]]; then
 fi
 
 ######
-echo "create logrotate config file.";
+echo "Create logrotate config file.";
 cat << \EOF > /etc/logrotate.d/parsedmarc
 /opt/containers/parsedmarc-docker/parsedmarc/log/*.log {
     rotate 31
@@ -81,7 +81,7 @@ cat << \EOF > /etc/logrotate.d/parsedmarc
     sharedscripts
     postrotate
       cd /opt/containers/parsedmarc-docker \
-        && /usr//bin/docker compose restart parsedmarc
+        && /usr/bin/docker compose restart parsedmarc
     endscript
 }
 EOF
