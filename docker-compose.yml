@@ -82,6 +82,7 @@ services:
       - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
       - TELEMETRY_ENABLED=false
+      - SERVER_PUBLICBASEURL=https://${ServerFqdn}
     networks:
       - parsedmarc-network
     healthcheck:
