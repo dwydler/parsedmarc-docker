@@ -16,6 +16,20 @@ fi
 ######
 
 APPPATH=/opt/containers/parsedmarc-docker
+FILE=docker-compose.yml
+
+echo "Check if the file docker-compose.yml already exist.";
+if [ ! -f $APPPATH/$FILE ]; then
+    echo "File $FILE was created successfully.";
+    /bin/cp $APPPATH/docker-compose.yml.example $APPPATH/$FILE
+else
+    echo "File $FILE already exist.";
+    echo
+fi
+
+######
+
+APPPATH=/opt/containers/parsedmarc-docker
 FILE=.env
 
 echo "Check if the file .env already exist.";
