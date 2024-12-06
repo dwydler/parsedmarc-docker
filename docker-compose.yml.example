@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   setup:
     container_name: epk-setup
