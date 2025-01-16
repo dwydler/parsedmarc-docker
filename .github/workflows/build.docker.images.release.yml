@@ -3,6 +3,8 @@ on:
     release:
       types: [created,edited]
 
+permissions:
+  contents: read
 
 jobs:
   docker:
