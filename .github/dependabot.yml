@@ -70,3 +70,13 @@ updates:
     directory: "/parsedmarc/docker/"
     schedule:
       interval: "daily"
+
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      # Check for updates to GitHub Actions every week
+      interval: "weekly"
+      day: "saturday"
+      timezone: "Europe/Berlin"
+      time: "05:00"
