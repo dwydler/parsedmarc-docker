@@ -75,7 +75,10 @@ updates:
   - package-ecosystem: "pip"
     directory: "/parsedmarc/docker/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      timezone: "Europe/Berlin"
+      day: "saturday"
+      time: "05:00"
 
 
   - package-ecosystem: "github-actions"
