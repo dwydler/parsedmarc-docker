@@ -1,5 +1,5 @@
 # Reference image
-FROM python:3.10.17-slim
+FROM python:3.10.18-slim
 
 # Metadata
 LABEL org.opencontainers.image.authors="Daniel Wydler"
