@@ -1,5 +1,5 @@
 # Reference image
-FROM nginx:1.29.0
+FROM nginx:1.29.1
 
 # Metadata
 LABEL org.opencontainers.image.authors="Daniel Wydler"
