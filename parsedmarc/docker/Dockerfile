@@ -12,7 +12,10 @@ COPY /parsedmarc/docker/requirements.txt ./
 
 #
 RUN apt-get update \
-    && apt-get install -y procps \
-    && pip install --no-cache-dir -r requirements.txt \
-    && rm -rf /root/.cache/ \
-    && rm -rf /var/lib/{apt,dpkg}/
+    && apt-get install -y \
+    procps \
+    && rm -r /var/lib/apt/lists/*
+    
+# Install python packages
+RUN pip install --no-cache-dir -r requirements.txt \
+    && rm -rf /root/.cache/
