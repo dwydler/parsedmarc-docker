@@ -5,14 +5,14 @@ FROM nginx:1.29.1
 LABEL org.opencontainers.image.authors="Daniel Wydler"
 
 # Package lists reread and updated
-RUN apt update
+RUN apt-get update
 
 # Install package(s)
 #RUN apt install -y certbot python3-certbot-nginx apache2-utils
-RUN apt install -y certbot python3-certbot-nginx
+RUN apt-get install -y certbot python3-certbot-nginx
 
 # Deletes the already downloaded installation files from the package cache
-RUN apt clean
+RUN apt-get clean
 
 # Remove the package lists
 RUN rm -r /var/lib/apt/lists/*
