@@ -11,7 +11,7 @@ services:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      
+
       - "./kibana/dashboard/:/usr/share/kibana/dashboards:ro"
     command:
       - bash
@@ -19,16 +19,16 @@ services:
       - |
         echo "Waiting for Elasticsearch availability.";
         until curl -s "http://elasticsearch:9200" | grep -q "missing authentication credentials"; do sleep 30; done;
-       
+
         echo "Setting kibana_system password.";
         until curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" "http://elasticsearch:9200/_security/user/kibana_system/_password" -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
-        
+
         echo "Create new role names parsedmarc.";
         curl  -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://elasticsearch:9200/_security/role/parsedmarc" -H "Content-Type: application/json" -d "{\"description\": \"Grants full access to all parsedmarc Indices.\",\"indices\": [{\"names\":[ \"smtp_tls*\", \"dmarc_aggregate*\", \"dmarc_forensic*\" ],\"privileges\":[\"all\"]}]}"
-        
+
         echo "Create service account parsemdarc.";
         curl  -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://elasticsearch:9200/_security/user/parsedmarc" -H "Content-Type: application/json" -d "{\"password\" : \"${PARSEDMARC_PASSWORD}\",\"roles\" : [ \"parsedmarc\" ],\"full_name\" : \"Service Account für parsedmarc\"}"
-        
+
 
         echo "Waiting for Kibana availability.";
         until curl -s -I "http://epk-kibana:5601" | grep -q "HTTP/1.1 302 Found"; do sleep 30; done;
@@ -56,7 +56,7 @@ services:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      
+
       - "./elasticsearch/data/:/usr/share/elasticsearch/data/:rw"
     networks:
       - parsedmarc-network
@@ -109,7 +109,7 @@ services:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      
+
       - "./nginx/templates/:/etc/nginx/templates/:ro"
       - "./nginx/conf/.htpasswd:/etc/nginx/.htpasswd:rw"
       - "./nginx/certbot/www/:/var/www/certbot/:rw"
@@ -138,7 +138,7 @@ services:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    
+
       - "./parsedmarc/conf/parsedmarc.ini:/etc/parsedmarc.ini:ro"
       - "./parsedmarc/log/:/var/log/parsedmarc/:rw"
       - "./geoipupdate/data/files:/usr/share/GeoIP/:ro"
@@ -176,7 +176,7 @@ services:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    
+
       - "./geoipupdate/data:/usr/share/GeoIP:rw"
 
 
