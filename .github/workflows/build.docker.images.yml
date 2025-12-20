@@ -17,8 +17,28 @@ env:
   REGISTRY_REPO: ${{ vars.REGISTRY_REPO }}
   REGISTRY_REPO_TAG_CACHE_NAME: ${{ vars.REGISTRY_REPO_TAG_CACHE_NAME }}
   REGISTRY_PLATFORMS: ${{ vars.REGISTRY_PLATFORMS }}
-    
+
 jobs:
+  requirements:
+    name: Requirements
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        vars: [REGISTRY, REGISTRY_ACCOUNT, REGISTRY_REPO, REGISTRY_REPO_TAG_CACHE_NAME, REGISTRY_PLATFORMS]
+
+    steps:
+      - name: Check if variable exist
+        run: |
+          if [[ -z ${!VARNAME} ]]; then
+            echo "Variable \"${VARNAME}\" not found. Please create the variable under \"Repository variables\" \(https://github.com/${{ github.REPOSITORY}}/settings/variables/actions\)."
+            exit 1
+          fi
+        env:
+          VARNAME: "${{ matrix.vars }}"
+
+
   docker:
     runs-on: ubuntu-latest
     strategy:
