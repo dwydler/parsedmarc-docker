@@ -1,6 +1,7 @@
+---
 name: "Tools - Validate Dockerfile Schema"
 
-on:
+"on":
   pull_request:
     branches: [ "master" ]
 
