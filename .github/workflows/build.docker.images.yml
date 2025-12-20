@@ -39,7 +39,7 @@ jobs:
           VARNAME: "${{ matrix.vars }}"
 
 
-  docker:
+  setup-build-push:
     runs-on: ubuntu-latest
     strategy:
       matrix:
