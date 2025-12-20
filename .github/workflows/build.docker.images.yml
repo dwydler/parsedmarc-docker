@@ -1,0 +1,104 @@
+---
+name: Build & publish docker images
+
+"on":
+  workflow_dispatch:
+  release:
+    types:
+      - released
+      - prereleased
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY: ${{ vars.REGISTRY }}
+  REGISTRY_ACCOUNT: ${{ vars.REGISTRY_ACCOUNT }}
+  REGISTRY_REPO: ${{ vars.REGISTRY_REPO }}
+  REGISTRY_REPO_TAG_CACHE_NAME: ${{ vars.REGISTRY_REPO_TAG_CACHE_NAME }}
+  REGISTRY_PLATFORMS: ${{ vars.REGISTRY_PLATFORMS }}
+
+jobs:
+  requirements:
+    name: Requirements
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        vars: [REGISTRY, REGISTRY_ACCOUNT, REGISTRY_REPO, REGISTRY_REPO_TAG_CACHE_NAME, REGISTRY_PLATFORMS]
+
+    steps:
+      - name: Check if variable exist
+        run: |
+          if [[ -z ${!VARNAME} ]]; then
+            echo "Variable \"${VARNAME}\" not found. Please create the variable under \"Repository variables\" \(https://github.com/${{ github.REPOSITORY}}/settings/variables/actions\)."
+            exit 1
+          fi
+        env:
+          VARNAME: "${{ matrix.vars }}"
+
+
+  setup-build-push:
+    name: Docker build & push
+    runs-on: ubuntu-latest
+    needs:
+      - requirements
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: elasticsearch
+            dockerfile: elasticsearch
+
+          - image: geoipupdate
+            dockerfile: geoipupdate
+
+          - image: kibana
+            dockerfile: kibana
+
+          - image: nginx
+            dockerfile: nginx
+
+          - image: app
+            dockerfile: parsedmarc
+
+          - image: utils
+            dockerfile: utils
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f  # v3.12.0
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef  # v3.6.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Create tag list for docker image
+        id: tags
+        run: |
+          if [ "${{ github.event.release.prerelease }}" = true ]; then
+            echo "docker=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          elif [ ! -z "${{ github.event.release.tag_name }}" ]; then
+            echo "docker=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:latest, ${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "docker=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build and push
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83  # v6.18.0
+        with:
+          context: .
+          file: ./${{ matrix.dockerfile }}/docker/Dockerfile
+          push: true
+          tags: ${{ steps.tags.outputs.docker }}
+          platforms: ${{ env.REGISTRY_PLATFORMS }}
+          cache-from: type=registry,ref=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ env.REGISTRY_REPO_TAG_CACHE_NAME }}
+          cache-to: type=registry,ref=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ env.REGISTRY_REPO_TAG_CACHE_NAME }},mode=max          
