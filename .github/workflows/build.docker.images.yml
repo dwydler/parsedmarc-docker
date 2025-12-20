@@ -42,6 +42,9 @@ jobs:
   setup-build-push:
     name: Docker build & push
     runs-on: ubuntu-latest
+    needs:
+      - requirements
+
     strategy:
       matrix:
         include:
