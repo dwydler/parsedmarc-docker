@@ -3,7 +3,8 @@ name: "Tools - Validate Dockerfile Schema"
 
 "on":
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - "master"
 
 jobs:
   validate-dockerfile-schema:
