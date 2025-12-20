@@ -2,7 +2,8 @@ name: "Tools - Validate YAML Schema"
 
 on:
   pull_request:
-    branches: [ master ]
+    branches:
+      - "master"
 
 permissions:
   contents: read  
