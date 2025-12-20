@@ -40,6 +40,7 @@ jobs:
 
 
   setup-build-push:
+    name: Docker build & push
     runs-on: ubuntu-latest
     strategy:
       matrix:
