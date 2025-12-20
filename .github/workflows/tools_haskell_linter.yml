@@ -15,8 +15,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
-        
-      - uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5 # v3.3.0
+
+      - name: Validate Dockerfile files
+        uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5  # v3.3.0
         with:
           dockerfile: Dockerfile
           recursive: true
