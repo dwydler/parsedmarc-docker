@@ -3,6 +3,10 @@ name: Build & publish docker images
 
 "on":
   workflow_dispatch:
+  release:
+    types:
+      - released
+      - prereleased
 
 permissions:
   contents: read
