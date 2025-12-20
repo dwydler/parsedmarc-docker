@@ -12,6 +12,9 @@ name: Tools - Docker Build Test
 permissions:
   contents: read
 
+env:
+  REGISTRY_PLATFORMS: ${{ vars.REGISTRY_PLATFORMS }}
+
 jobs:
   docker-build-image:
     name: Docker Build Image
@@ -50,4 +53,4 @@ jobs:
         with:
           context: .
           file: ${{ matrix.dockerfile }}
-          platforms: linux/amd64,linux/arm64/v8
+          platforms: ${{ env.REGISTRY_PLATFORMS }}
