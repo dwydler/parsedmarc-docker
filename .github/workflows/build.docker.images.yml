@@ -48,22 +48,22 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: wydler/parsedmarc-elasticsearch
+          - image: elasticsearch
             dockerfile: ./elasticsearch/docker/Dockerfile
 
-          - image: wydler/parsedmarc-geoipupdate
+          - image: geoipupdate
             dockerfile: ./geoipupdate/docker/Dockerfile
 
-          - image: wydler/parsedmarc-kibana
+          - image: kibana
             dockerfile: ./kibana/docker/Dockerfile
 
-          - image: wydler/parsedmarc-nginx
+          - image: nginx
             dockerfile: ./nginx/docker/Dockerfile
 
-          - image: wydler/parsedmarc-app
+          - image: app
             dockerfile: ./parsedmarc/docker/Dockerfile
 
-          - image: wydler/parsedmarc-utils
+          - image: utils
             dockerfile: ./utils/docker/Dockerfile
 
     steps:
@@ -87,12 +87,17 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - 
-        name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
-        with:
-          images: ${{ matrix.image }}
+
+      - name: Create tag list for docker image
+        id: tags
+        run: |
+          if [ "${{ github.event.release.prerelease }}" = true ]; then
+            echo "docker=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          elif [ ! -z "${{ github.event.release.tag_name }}" ]; then
+            echo "docker=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:latest, ${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "docker=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
       -
         name: Build and push
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
@@ -100,8 +105,7 @@ jobs:
           context: .
           file: ${{ matrix.dockerfile }}
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.tags.outputs.docker }}
           platforms: linux/amd64,linux/arm64/v8
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
