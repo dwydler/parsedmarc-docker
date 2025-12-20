@@ -8,6 +8,9 @@ name: "Tools - Validate Dockerfile Schema"
     paths:
       - "**Dockerfile"
 
+permissions:
+  contents: read
+
 jobs:
   validate-dockerfile-schema:
     name: Haskell Linter
