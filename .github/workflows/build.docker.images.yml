@@ -1,5 +1,7 @@
+---
 name: Build & publish docker images
-on:
+
+"on":
   workflow_dispatch:
 
 permissions:
