@@ -11,6 +11,13 @@ name: Build & publish docker images
 permissions:
   contents: read
 
+env:
+  REGISTRY: ${{ vars.REGISTRY }}
+  REGISTRY_ACCOUNT: ${{ vars.REGISTRY_ACCOUNT }}
+  REGISTRY_REPO: ${{ vars.REGISTRY_REPO }}
+  REGISTRY_REPO_TAG_CACHE_NAME: ${{ vars.REGISTRY_REPO_TAG_CACHE_NAME }}
+  REGISTRY_PLATFORMS: ${{ vars.REGISTRY_PLATFORMS }}
+    
 jobs:
   docker:
     runs-on: ubuntu-latest
