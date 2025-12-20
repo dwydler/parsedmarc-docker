@@ -5,6 +5,8 @@ name: "Tools - Validate Dockerfile Schema"
   pull_request:
     branches:
       - "master"
+    paths:
+      - "**Dockerfile"
 
 jobs:
   validate-dockerfile-schema:
@@ -13,7 +15,7 @@ jobs:
 
     permissions:
       contents: read
-      
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
