@@ -4,7 +4,12 @@ on:
   pull_request:
     branches:
       - "master"
-
+    paths:
+      - ".yamllint"
+      - "**.yaml"
+      - "**.yml"
+      - "**.yml.example"
+      
 permissions:
   contents: read  
 
