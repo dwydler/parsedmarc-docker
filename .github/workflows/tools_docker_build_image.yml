@@ -1,6 +1,7 @@
+---
 name: Tools - Docker Build Test
 
-on:
+"on":
   pull_request:
     branches: [ "master" ]
 
