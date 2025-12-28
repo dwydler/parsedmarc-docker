@@ -47,7 +47,7 @@ updates:
       time: "05:00"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-major","version-update:semver-minor"]
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "docker" # See documentation for possible values
     directory: "/elasticsearch/docker/" # Location of package manifests
