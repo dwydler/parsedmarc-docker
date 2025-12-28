@@ -1,5 +1,5 @@
 # Reference image
-FROM python:3.12.12-slim
+FROM python:3.14.2-slim
 
 #
 WORKDIR /
