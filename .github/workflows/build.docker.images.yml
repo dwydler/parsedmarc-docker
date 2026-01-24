@@ -84,12 +84,19 @@ jobs:
       - name: Create tag list for docker image
         id: tags
         run: |
+        
+          # basename does remove the directory prefix of a path
+          # https://stackoverflow.com/questions/3294072/get-last-dirname-filename-in-a-file-path-argument-in-bash
+          container_tag=$(basename ${{ github.ref_name }})
+          echo $container_tag
+
+
           if [ "${{ github.event.release.prerelease }}" = true ]; then
-            echo "docker=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ github.ref_name }}" >> $GITHUB_OUTPUT
+            echo "docker=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:$container_tag" >> $GITHUB_OUTPUT
           elif [ ! -z "${{ github.event.release.tag_name }}" ]; then
             echo "docker=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:latest, ${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
           else
-            echo "docker=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ github.ref_name }}" >> $GITHUB_OUTPUT
+            echo "docker=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:$container_tag" >> $GITHUB_OUTPUT
           fi
 
       - name: Build and push
