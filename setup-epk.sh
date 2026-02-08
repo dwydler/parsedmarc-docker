@@ -4,7 +4,7 @@ COPIEDFILES=0
 
 ######
 
-APPPATH=/opt/containers/parsedmarc-docker/parsedmarc/conf
+APPPATH=/opt/containers/parsedmarc-docker/data/parsedmarc
 FILE=parsedmarc.ini
 
 echo "Check if the file $FILE already exist.";
