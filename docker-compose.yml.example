@@ -113,11 +113,11 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-      - "./nginx/templates/:/etc/nginx/templates/:ro"
-      - "./nginx/conf/.htpasswd:/etc/nginx/.htpasswd:rw"
-      - "./nginx/certbot/www/:/var/www/certbot/:rw"
-      - "./nginx/certbot/ssl/:/etc/letsencrypt/:rw"
-      - "./nginx/certbot/log/:/var/log/letsencrypt/:rw"
+      - "./data/nginx/templates/:/etc/nginx/templates/:ro"
+      - "./data/nginx/conf/.htpasswd:/etc/nginx/.htpasswd:rw"
+      - "./data/nginx/certbot/www/:/var/www/certbot/:rw"
+      - "./data/nginx/certbot/ssl/:/etc/letsencrypt/:rw"
+      - "./data/nginx/certbot/log/:/var/log/letsencrypt/:rw"
     networks:
       - parsedmarc-network
     ports:
