@@ -33,6 +33,9 @@ services:
         echo "Waiting for Kibana availability.";
         until curl -s -I "http://epk-kibana:5601" | grep -q "HTTP/1.1 302 Found"; do sleep 30; done;
 
+        echo "Download file export.ndjson
+        cd /usr/share/kibana/dashboards/ && curl -O https://github.com/dwydler/parsedmarc-docker/blob/${DH_CONTAINER_TAG}/docker/kibana/export.ndjson
+
         echo "Import parsemarc Dashboards.";
         curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://kibana:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" -H "securitytenant: global" --form "file=@/usr/share/kibana/dashboards/export.ndjson";
 
