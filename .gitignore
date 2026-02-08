@@ -1,3 +1,4 @@
 # Except this file
 !.gitignore
 .env
+docker-compose.yml
