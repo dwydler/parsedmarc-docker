@@ -1,0 +1,6 @@
+# Except this file
+!.gitignore
+
+# Exclude all (compression) log files
+*.log
+*.log*.gz
