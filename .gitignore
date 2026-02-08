@@ -1,3 +1,5 @@
 # Except this file
 !.gitignore
+
+# Ignore the .env file (contains sensitive environment variables and secrets)
 .env
