@@ -30,7 +30,7 @@ This is a port of the native [parsedmarc application](https://github.com/domaina
   ```
 4. Change the ownership for the elasticsearch data directory:
   ```
-  sudo chown -R 1000:root /opt/containers/parsedmarc-docker/elasticsearch/data/
+  sudo chown -R 1000:root /opt/containers/parsedmarc-docker/data/elasticsearch/
   ```
 5. Create the .env file with random passwords:
   ```
