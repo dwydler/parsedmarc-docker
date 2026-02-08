@@ -32,7 +32,7 @@ services:
 
 
         echo "Waiting for Kibana availability.";
-        until curl -s -I "http://epk-kibana:5601" | grep -q "HTTP/1.1 302 Found"; do sleep 10; done;
+        until curl -s -I "http://kibana:5601" | grep -q "HTTP/1.1 302 Found"; do sleep 10; done;
 
         echo "Download file export.ndjson";
         cd /tmp/ && curl -O https://github.com/dwydler/parsedmarc-docker/blob/${DH_CONTAINER_TAG}/docker/kibana/export.ndjson
