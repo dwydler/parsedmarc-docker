@@ -65,7 +65,7 @@ if [[ "$COPIEDFILES" -eq "3" ]]; then
     echo "Set random password for the user parsedmarc.";
     password=$(/bin/tr -dc 'A-Za-z0-9!?=' < /dev/urandom | /bin/head -c 20)
     /bin/sed -i 's/<your-parsedmarc-password>/'$password'/g' /$APPPATH/$FILE
-    /bin/sed -i 's/<your-parsedmarc-password>/'$password'/g' /$APPPATH/parsedmarc/conf/parsedmarc.ini
+    /bin/sed -i 's/<your-parsedmarc-password>/'$password'/g' /$APPPATH/data/parsedmarc/parsedmarc.ini
 fi
 
 ######
