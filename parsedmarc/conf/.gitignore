@@ -1,0 +1,5 @@
+# Except this file
+!.gitignore
+
+# Exclude alle configuration files
+*.ini
