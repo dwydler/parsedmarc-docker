@@ -1,0 +1,5 @@
+# Keep the .gitignore file tracked
+!.gitignore
+
+# Ignore the certbot folder (contains certificates and temporary files)
+certbot/
