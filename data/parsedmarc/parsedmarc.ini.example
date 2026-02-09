@@ -11,7 +11,6 @@ watch = True
 test = False
 #check_timeout = 3600
 #batch_size = 0
-#since = 1d
 
 [imap]
 host = server.domain.de
