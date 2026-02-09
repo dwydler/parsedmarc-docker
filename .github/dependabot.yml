@@ -6,7 +6,7 @@
 version: 2
 updates:
   - package-ecosystem: "docker" # See documentation for possible values
-    directory: "/nginx/docker/" # Location of package manifests
+    directory: "/docker/nginx/" # Location of package manifests
     schedule:
       interval: "weekly"
       timezone: "Europe/Berlin"
