@@ -35,7 +35,7 @@ services:
         until curl -s -I "http://kibana:5601" | grep -q "HTTP/1.1 302 Found"; do sleep 10; done;
 
         echo "Download file export.ndjson";
-        cd /tmp/ && curl -O https://github.com/dwydler/parsedmarc-docker/blob/${DH_CONTAINER_TAG}/docker/kibana/export.ndjson
+        cd /tmp/ && curl -O https://raw.githubusercontent.com/dwydler/parsedmarc-docker/refs/heads/${DH_CONTAINER_TAG}/docker/kibana/export.ndjson
 
         echo "Import parsemarc Dashboards.";
         curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://kibana:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" -H "securitytenant: global" --form "file=@/tmp/export.ndjson";
