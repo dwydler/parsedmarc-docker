@@ -61,7 +61,7 @@ updates:
         update-types: ["version-update:semver-major","version-update:semver-minor"]
 
   - package-ecosystem: "docker" # See documentation for possible values
-    directory: "/kibana/docker/" # Location of package manifests
+    directory: "/docker/kibana/" # Location of package manifests
     schedule:
       interval: "weekly"
       timezone: "Europe/Berlin"
