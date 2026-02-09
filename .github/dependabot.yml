@@ -28,7 +28,7 @@ updates:
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "docker" # See documentation for possible values
-    directory: "/geoipupdate/docker/" # Location of package manifests
+    directory: "/docker/geoipupdate/" # Location of package manifests
     schedule:
       interval: "weekly"
       timezone: "Europe/Berlin"
