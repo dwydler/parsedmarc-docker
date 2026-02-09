@@ -148,7 +148,7 @@ services:
 
       - "./parsedmarc/conf/parsedmarc.ini:/etc/parsedmarc.ini:ro"
       - "./parsedmarc/log/:/var/log/parsedmarc/:rw"
-      - "./geoipupdate/data/files:/usr/share/GeoIP/:ro"
+      - "./data/geoipupdate/:/usr/share/GeoIP/:ro"
     command: parsedmarc -c /etc/parsedmarc.ini --debug
     networks:
       - parsedmarc-network
@@ -184,7 +184,7 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-      - "./geoipupdate/data:/usr/share/GeoIP:rw"
+      - "./geoipupdate/data/:/usr/share/GeoIP:rw"
 
 
 
