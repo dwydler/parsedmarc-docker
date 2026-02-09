@@ -35,7 +35,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN useradd -ms /bin/bash parsedmarc
 
 # Switches the user under which all subsequent commands in the container run
-USER parsedmarc
+# USER parsedmarc
 
 # Standard ENTRYPOINT
 ENTRYPOINT ["parsedmarc"]
