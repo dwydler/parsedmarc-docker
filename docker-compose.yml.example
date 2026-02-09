@@ -41,6 +41,9 @@ services:
         curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://kibana:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" -H "securitytenant: global" --form "file=@/tmp/export.ndjson";
 
         echo "All done!";
+
+        # Keep container running after setup completes
+        tail -f /dev/null
     networks:
       - parsedmarc-network
 
