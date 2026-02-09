@@ -17,7 +17,7 @@ updates:
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "docker" # See documentation for possible values
-    directory: "/utils/docker/" # Location of package manifests
+    directory: "/docker/utils/" # Location of package manifests
     schedule:
       interval: "weekly"
       timezone: "Europe/Berlin"
