@@ -182,7 +182,7 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-      - "./geoipupdate/data/:/usr/share/GeoIP:rw"
+      - "./data/geoipupdate/:/usr/share/GeoIP:rw"
 
 
 
