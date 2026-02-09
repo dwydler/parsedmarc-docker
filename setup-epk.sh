@@ -71,7 +71,7 @@ fi
 ######
 echo "Create logrotate config file.";
 cat << \EOF > /etc/logrotate.d/parsedmarc
-/opt/containers/parsedmarc-docker/parsedmarc/log/*.log {
+/opt/containers/parsedmarc-docker/data/parsedmarc/logs/*.log {
     rotate 31
     daily
     compress
