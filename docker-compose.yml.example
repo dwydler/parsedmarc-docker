@@ -116,7 +116,6 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
       - "./data/nginx/templates/:/etc/nginx/templates/:ro"
-      - "./data/nginx/conf/.htpasswd:/etc/nginx/.htpasswd:rw"
       - "./data/nginx/certbot/www/:/var/www/certbot/:rw"
       - "./data/nginx/certbot/ssl/:/etc/letsencrypt/:rw"
       - "./data/nginx/certbot/log/:/var/log/letsencrypt/:rw"
