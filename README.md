@@ -34,8 +34,7 @@ This is a port of the native [parsedmarc application](https://github.com/domaina
   ```
 5. Create the .env file with random passwords:
   ```
-  chmod 755 /opt/containers/parsedmarc-docker/setup-epk.sh
-  /opt/containers/parsedmarc-docker/setup-epk.sh
+  /bin/bash /opt/containers/parsedmarc-docker/setup-epk.sh
   ```
 6. Editing `/opt/containers/parsedmarc-docker/.env` and set your parameters and data. Any change requires an restart of the containers.
 7. Editing `/opt/containers/parsedmarc-docker/data/parsedmarc/parsedmarc.ini` and set your parameters for the application.
