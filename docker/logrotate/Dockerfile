@@ -1,5 +1,5 @@
 # Reference image
-FROM docker.elastic.co/samuelrunggaldier/logrotate:1.2.3"
+FROM docker.elastic.co/samuelrunggaldier/logrotate:1.2.3
 
 # Metadata
 LABEL maintainer="Daniel Wydler"
