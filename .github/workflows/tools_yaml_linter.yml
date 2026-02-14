@@ -12,7 +12,7 @@ name: "Tools - Validate YAML Schema"
       - "**.yml.example"
 
 permissions:
-  contents: read  
+  contents: read
 
 jobs:
   validate-yaml:
