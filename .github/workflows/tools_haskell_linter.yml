@@ -26,6 +26,6 @@ jobs:
       - name: Validate Dockerfile files
         uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5  # v3.3.0
         with:
-          dockerfile: Dockerfile
-          recursive: true
+          dockerfile: "Dockerfile"
+          recursive: "true"
           ignore: "DL3008,DL3013,DL3015,DL3018"
