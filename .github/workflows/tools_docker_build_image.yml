@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dockerfile: [elasticsearch, geoipupdate, kibana, nginx, parsedmarc, utils]
+        dockerfile: [elasticsearch, geoipupdate, kibana, nginx, parsedmarc, utils, logrotate]
 
     steps:
       - name: Checkout Repository
