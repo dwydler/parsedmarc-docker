@@ -59,7 +59,7 @@ updates:
       time: "05:00"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-major","version-update:semver-minor"]
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
   - package-ecosystem: "docker"  # See documentation for possible values
     directory: "/kibana/docker/"  # Location of package manifests
@@ -70,7 +70,7 @@ updates:
       time: "05:00"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-major","version-update:semver-minor"]
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
 
   - package-ecosystem: "pip"
