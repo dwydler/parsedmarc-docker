@@ -4,5 +4,3 @@
 # Ignore all .ini files (often contain configuration settings, secrets, or local overrides)
 *.ini
 
-# Ignore the logs folder (contains log files from parsedmarc)
-logs/
