@@ -184,6 +184,21 @@ services:
       - "./data/geoipupdate/:/usr/share/GeoIP:rw"
 
 
+  logrotate:
+    container_name: "epk-logrotate"
+    image: "wydler/parsedmarc-logrotate:${DH_CONTAINER_TAG}"
+    environment:
+      - TZ=Europe/Berlin
+      - LOGS_PATH=/var/log/parsedmarc/*.log
+      - TRIGGER_INTERVAL=daily
+      - MAX_SIZE=NONE
+      - MAX_BACKUPS=31
+      - DELAYCOMPRESS=true
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+      - "./data/parsedmarc/logs:/var/log/parsedmarc/"
+
 
 networks:
   parsedmarc-network:
