@@ -180,7 +180,6 @@ services:
       - "./geoipupdate/data:/usr/share/GeoIP:rw"
 
 
-
 networks:
   parsedmarc-network:
     driver: bridge
