@@ -10,3 +10,6 @@ yaml-files:
 rules:
   empty-lines:
     level: warning
+
+  line-length:
+    max: 335
