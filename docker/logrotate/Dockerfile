@@ -1,5 +1,5 @@
 # Reference image
-FROM samuelrunggaldier/logrotate:1.2.3
+FROM wydler/logrotate:1.2.3
 
 # Metadata
 LABEL maintainer="Daniel Wydler"
