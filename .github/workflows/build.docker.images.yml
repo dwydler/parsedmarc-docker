@@ -87,7 +87,7 @@ jobs:
       - name: Create tag list for docker image
         id: tags
         run: |
-        
+
           # basename does remove the directory prefix of a path
           # https://stackoverflow.com/questions/3294072/get-last-dirname-filename-in-a-file-path-argument-in-bash
           container_tag=$(basename ${{ github.ref_name }})
@@ -103,7 +103,7 @@ jobs:
           fi
 
       - name: Build and push
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83  # v6.18.0
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8  # v6.19.2
         with:
           context: .
           file: ./docker/${{ matrix.dockerfile }}/Dockerfile
@@ -111,4 +111,4 @@ jobs:
           tags: ${{ steps.tags.outputs.docker }}
           platforms: ${{ env.REGISTRY_PLATFORMS }}
           cache-from: type=registry,ref=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ env.REGISTRY_REPO_TAG_CACHE_NAME }}
-          cache-to: type=registry,ref=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ env.REGISTRY_REPO_TAG_CACHE_NAME }},mode=max          
+          cache-to: type=registry,ref=${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}-${{ matrix.image }}:${{ env.REGISTRY_REPO_TAG_CACHE_NAME }},mode=max

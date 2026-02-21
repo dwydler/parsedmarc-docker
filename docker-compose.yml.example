@@ -199,7 +199,6 @@ services:
 
       - "./data/parsedmarc/logs:/var/log/parsedmarc/"
 
-
 networks:
   parsedmarc-network:
     driver: bridge

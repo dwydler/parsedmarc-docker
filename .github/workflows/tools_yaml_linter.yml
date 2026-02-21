@@ -1,6 +1,7 @@
+---
 name: "Tools - Validate YAML Schema"
 
-on:
+"on":
   pull_request:
     branches:
       - "master"
@@ -9,18 +10,18 @@ on:
       - "**.yaml"
       - "**.yml"
       - "**.yml.example"
-      
+
 permissions:
-  contents: read  
+  contents: read
 
 jobs:
   validate-yaml:
     name: YAML Linter
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+
       - name: Validate YAML files
         run: yamllint .
