@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dockerfile: [elasticsearch, geoipupdate, kibana, nginx, parsedmarc, utils]
+        dockerfile: [elasticsearch, geoipupdate, kibana, nginx, parsedmarc, utils, logrotate]
 
     steps:
       - name: Checkout Repository
@@ -36,5 +36,5 @@ jobs:
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8  # v6.19.2
         with:
           context: .
-          file: ./${{ matrix.dockerfile }}/docker/Dockerfile
+          file: ./docker/${{ matrix.dockerfile }}/Dockerfile
           platforms: ${{ env.REGISTRY_PLATFORMS }}

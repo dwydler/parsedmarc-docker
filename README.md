@@ -30,15 +30,14 @@ This is a port of the native [parsedmarc application](https://github.com/domaina
   ```
 4. Change the ownership for the elasticsearch data directory:
   ```
-  sudo chown -R 1000:root /opt/containers/parsedmarc-docker/elasticsearch/data/
+  sudo chown -R 1000:root /opt/containers/parsedmarc-docker/data/elasticsearch/
   ```
 5. Create the .env file with random passwords:
   ```
-  chmod 755 /opt/containers/parsedmarc-docker/setup-epk.sh
-  /opt/containers/parsedmarc-docker/setup-epk.sh
+  /bin/bash /opt/containers/parsedmarc-docker/setup-epk.sh
   ```
 6. Editing `/opt/containers/parsedmarc-docker/.env` and set your parameters and data. Any change requires an restart of the containers.
-7. Editing `/opt/containers/parsedmarc-docker/parsedmarc/conf/parsedmarc.ini` and set your parameters for the application.
+7. Editing `/opt/containers/parsedmarc-docker/data/parsedmarc/parsedmarc.ini` and set your parameters for the application.
 8. Starting application with `docker compose -f /opt/containers/parsedmarc-docker/docker-compose.yml up -d`.
 9. Don't forget to test, that the application works successfully (e.g. http(s)://IP-Addresse or FQDN/).
 

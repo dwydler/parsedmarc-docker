@@ -1,0 +1,5 @@
+# Keep the .gitignore file tracked
+!.gitignore
+
+# Ignores all log files  (e.g., application logs)
+*.log*

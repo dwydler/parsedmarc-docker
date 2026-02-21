@@ -1,0 +1,5 @@
+# Except this file
+!.gitignore
+
+# Ignore all other files by default, except those explicitly unignored above
+*
