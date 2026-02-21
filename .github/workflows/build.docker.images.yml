@@ -68,7 +68,7 @@ jobs:
             dockerfile: utils
 
           - image: logrotate
-            dockerfile: logrotate            
+            dockerfile: logrotate
 
     steps:
       - name: Checkout
