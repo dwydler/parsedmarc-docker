@@ -2,4 +2,4 @@
 !.gitignore
 
 # Ignores all log files  (e.g., application logs)
-*.log
+*.log*
