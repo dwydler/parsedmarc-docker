@@ -6,8 +6,8 @@
 
 version: 2
 updates:
-  - package-ecosystem: "docker"  # See documentation for possible values
-    directory: "/nginx/docker/"  # Location of package manifests
+  - package-ecosystem: "docker"
+    directory: "/docker/nginx/"
     schedule:
       interval: "weekly"
       timezone: "Europe/Berlin"
@@ -17,8 +17,8 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
 
-  - package-ecosystem: "docker"  # See documentation for possible values
-    directory: "/utils/docker/"  # Location of package manifests
+  - package-ecosystem: "docker"
+    directory: "/docker/utils/"
     schedule:
       interval: "weekly"
       timezone: "Europe/Berlin"
@@ -28,8 +28,8 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
 
-  - package-ecosystem: "docker"  # See documentation for possible values
-    directory: "/geoipupdate/docker/"  # Location of package manifests
+  - package-ecosystem: "docker"
+    directory: "/docker/geoipupdate/"
     schedule:
       interval: "weekly"
       timezone: "Europe/Berlin"
@@ -39,8 +39,8 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
 
-  - package-ecosystem: "docker"  # See documentation for possible values
-    directory: "/parsedmarc/docker/"  # Location of package manifests
+  - package-ecosystem: "docker"
+    directory: "/docker/parsedmarc/"
     schedule:
       interval: "weekly"
       timezone: "Europe/Berlin"
@@ -50,8 +50,8 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
 
-  - package-ecosystem: "docker"  # See documentation for possible values
-    directory: "/elasticsearch/docker/"  # Location of package manifests
+  - package-ecosystem: "docker"
+    directory: "/docker/elasticsearch/"
     schedule:
       interval: "weekly"
       timezone: "Europe/Berlin"
@@ -61,8 +61,8 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
-  - package-ecosystem: "docker"  # See documentation for possible values
-    directory: "/kibana/docker/"  # Location of package manifests
+  - package-ecosystem: "docker"
+    directory: "/docker/kibana/"
     schedule:
       interval: "weekly"
       timezone: "Europe/Berlin"
@@ -74,7 +74,7 @@ updates:
 
 
   - package-ecosystem: "pip"
-    directory: "/parsedmarc/docker/"
+    directory: "/docker/parsedmarc/"
     schedule:
       interval: "weekly"
       timezone: "Europe/Berlin"
@@ -83,9 +83,8 @@ updates:
 
 
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directory: "/.github/workflows/"
     schedule:
-      # Check for updates to GitHub Actions every week
       interval: "weekly"
       timezone: "Europe/Berlin"
       day: "saturday"

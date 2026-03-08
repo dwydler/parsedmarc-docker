@@ -1,0 +1,8 @@
+# Except this file
+!.gitignore
+
+# Ignore lock files (e.g., package.lock, poetry.lock)
+*.lock
+
+# Ignore MaxMind database files
+*.mmdb

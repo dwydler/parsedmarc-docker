@@ -7,36 +7,41 @@ services:
     environment:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - KIBANA_PASSWORD=${KIBANA_PASSWORD}
+      - PARSEDMARC_PASSWORD=${PARSEDMARC_PASSWORD}
     volumes:
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-
-      - "./kibana/dashboard/:/usr/share/kibana/dashboards:ro"
     command:
       - bash
       - -c
       - |
         echo "Waiting for Elasticsearch availability.";
-        until curl -s "http://elasticsearch:9200" | grep -q "missing authentication credentials"; do sleep 30; done;
+        until curl -s "http://elasticsearch:9200" | grep -q "missing authentication credentials"; do sleep 10; done;
 
         echo "Setting kibana_system password.";
         until curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" "http://elasticsearch:9200/_security/user/kibana_system/_password" -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
 
         echo "Create new role names parsedmarc.";
-        curl  -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://elasticsearch:9200/_security/role/parsedmarc" -H "Content-Type: application/json" -d "{\"description\": \"Grants full access to all parsedmarc Indices.\",\"indices\": [{\"names\":[ \"smtp_tls*\", \"dmarc_aggregate*\", \"dmarc_forensic*\" ],\"privileges\":[\"all\"]}]}"
+        curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://elasticsearch:9200/_security/role/parsedmarc" -H "Content-Type: application/json" -d "{\"description\": \"Grants full access to all parsedmarc Indices.\",\"indices\": [{\"names\":[ \"smtp_tls*\", \"dmarc_aggregate*\", \"dmarc_forensic*\" ],\"privileges\":[\"all\"]}]}"
 
-        echo "Create service account parsemdarc.";
-        curl  -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://elasticsearch:9200/_security/user/parsedmarc" -H "Content-Type: application/json" -d "{\"password\" : \"${PARSEDMARC_PASSWORD}\",\"roles\" : [ \"parsedmarc\" ],\"full_name\" : \"Service Account für parsedmarc\"}"
+        echo "Create service account parsedmarc.";
+        curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://elasticsearch:9200/_security/user/parsedmarc" -H "Content-Type: application/json" -d "{\"password\" : \"${PARSEDMARC_PASSWORD}\",\"roles\" : [ \"parsedmarc\" ],\"full_name\" : \"Service Account für parsedmarc\"}"
 
 
         echo "Waiting for Kibana availability.";
-        until curl -s -I "http://epk-kibana:5601" | grep -q "HTTP/1.1 302 Found"; do sleep 30; done;
+        until curl -s -I "http://kibana:5601" | grep -q "HTTP/1.1 302 Found"; do sleep 10; done;
+
+        echo "Download file export.ndjson";
+        cd /tmp/ && curl -s -O https://raw.githubusercontent.com/dwydler/parsedmarc-docker/refs/heads/${DH_CONTAINER_TAG}/docker/kibana/export.ndjson
 
         echo "Import parsemarc Dashboards.";
-        curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://kibana:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" -H "securitytenant: global" --form "file=@/usr/share/kibana/dashboards/export.ndjson";
+        curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://kibana:5601/api/saved_objects/_import?overwrite=true" -H "kbn-xsrf: true" -H "securitytenant: global" --form "file=@/tmp/export.ndjson";
 
         echo "All done!";
+
+        # Keep container running after setup completes
+        tail -f /dev/null
     networks:
       - parsedmarc-network
 
@@ -57,7 +62,7 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-      - "./elasticsearch/data/:/usr/share/elasticsearch/data/:rw"
+      - "./data/elasticsearch/:/usr/share/elasticsearch/data/:rw"
     networks:
       - parsedmarc-network
     healthcheck:
@@ -110,11 +115,10 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-      - "./nginx/templates/:/etc/nginx/templates/:ro"
-      - "./nginx/conf/.htpasswd:/etc/nginx/.htpasswd:rw"
-      - "./nginx/certbot/www/:/var/www/certbot/:rw"
-      - "./nginx/certbot/ssl/:/etc/letsencrypt/:rw"
-      - "./nginx/certbot/log/:/var/log/letsencrypt/:rw"
+      - "./data/nginx/templates/:/etc/nginx/templates/:ro"
+      - "./data/nginx/certbot/www/:/var/www/certbot/:rw"
+      - "./data/nginx/certbot/ssl/:/etc/letsencrypt/:rw"
+      - "./data/nginx/certbot/log/:/var/log/letsencrypt/:rw"
     networks:
       - parsedmarc-network
     ports:
@@ -139,9 +143,9 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-      - "./parsedmarc/conf/parsedmarc.ini:/etc/parsedmarc.ini:ro"
-      - "./parsedmarc/log/:/var/log/parsedmarc/:rw"
-      - "./geoipupdate/data/files:/usr/share/GeoIP/:ro"
+      - "./data/parsedmarc/parsedmarc.ini:/etc/parsedmarc.ini:ro"
+      - "./data/parsedmarc/logs/:/var/log/parsedmarc/:rw"
+      - "./data/geoipupdate/:/usr/share/GeoIP/:ro"
     command: parsedmarc -c /etc/parsedmarc.ini --debug
     networks:
       - parsedmarc-network
@@ -177,8 +181,23 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-      - "./geoipupdate/data:/usr/share/GeoIP:rw"
+      - "./data/geoipupdate/:/usr/share/GeoIP:rw"
 
+
+  logrotate:
+    container_name: "epk-logrotate"
+    image: "wydler/parsedmarc-logrotate:${DH_CONTAINER_TAG}"
+    environment:
+      - TZ=Europe/Berlin
+      - LOGS_PATH=/var/log/parsedmarc/*.log
+      - TRIGGER_INTERVAL=daily
+      - MAX_SIZE=NONE
+      - MAX_BACKUPS=31
+      - DELAYCOMPRESS=true
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+      - "./data/parsedmarc/logs:/var/log/parsedmarc/"
 
 networks:
   parsedmarc-network:

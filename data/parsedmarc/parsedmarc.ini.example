@@ -5,15 +5,12 @@ save_smtp_tls = True
 log_file = /var/log/parsedmarc/parsedmarc.log
 silent = False
 debug = True
-delete = False
 
 [mailbox]
 watch = True
 test = False
 #check_timeout = 3600
 #batch_size = 0
-#since = 1d
-
 
 [imap]
 host = server.domain.de

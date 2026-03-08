@@ -1,4 +1,9 @@
 # Except this file
 !.gitignore
+
+# Ignore the .env file (contains sensitive environment variables and secrets)
 .env
-parsedmarc.ini
+
+# Ignore the docker-compose file (contains local configuration and sensitive data)
+docker-compose.yml
+compose.yaml
