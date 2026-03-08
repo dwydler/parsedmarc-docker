@@ -68,24 +68,6 @@ if [[ "$COPIEDFILES" -eq "3" ]]; then
     /bin/sed -i 's/<your-parsedmarc-password>/'$password'/g' /$APPPATH/data/parsedmarc/parsedmarc.ini
 fi
 
-######
-echo "Create logrotate config file.";
-cat << \EOF > /etc/logrotate.d/parsedmarc
-/opt/containers/parsedmarc-docker/data/parsedmarc/logs/*.log {
-    rotate 31
-    daily
-    compress
-    missingok
-    delaycompress
-    dateext
-    sharedscripts
-    postrotate
-      cd /opt/containers/parsedmarc-docker \
-        && /usr/bin/docker compose restart parsedmarc
-    endscript
-}
-EOF
-
 
 echo
 echo "The script has reached the end.";
