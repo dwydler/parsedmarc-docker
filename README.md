@@ -1,4 +1,5 @@
 # EPK (Elastic, parsedmarc, Kibana)
+[![Docker Image Version (tag latest)](https://img.shields.io/docker/v/wydler/parsedmarc-app/latest)](https://hub.docker.com/r/wydler/parsedmarc-app) [![Docker Image Size (tag latest)](https://img.shields.io/docker/image-size/wydler/parsedmarc-app/latest)](https://hub.docker.com/r/wydler/parsedmarc-app) [![Docker Pulls](https://img.shields.io/docker/pulls/wydler/parsedmarc-app)](https://hub.docker.com/r/wydler/parsedmarc-app) [![Docker Stars](https://img.shields.io/docker/stars/wydler/parsedmarc-app)](https://hub.docker.com/r/wydler/parsedmarc-app)
 
 ## Overview
 A Python package and CLI for parsing aggregate, forensic DMARC and TLS/MTA-STS reports,
