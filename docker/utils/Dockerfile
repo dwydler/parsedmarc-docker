@@ -15,6 +15,9 @@ RUN apk add --no-cache \
         bash \
         curl
 
+# Kibana export file for later import/use inside container
+COPY docker/kibana/export.ndjson /tmp/
+
 #ENTRYPOINT [ "/bin/sh", "-c", "--" , "while true; do sleep 30; done;" ]
 # Default command: start Bash shell
 CMD ["/bin/bash"]
