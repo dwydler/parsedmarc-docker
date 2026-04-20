@@ -28,7 +28,6 @@ services:
         echo "Create service account parsedmarc.";
         curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" "http://elasticsearch:9200/_security/user/parsedmarc" -H "Content-Type: application/json" -d "{\"password\" : \"${PARSEDMARC_PASSWORD}\",\"roles\" : [ \"parsedmarc\" ],\"full_name\" : \"Service Account für parsedmarc\"}"
 
-
         echo "Waiting for Kibana availability.";
         until curl -s -I "http://kibana:5601" | grep -q "HTTP/1.1 302 Found"; do sleep 10; done;
 
