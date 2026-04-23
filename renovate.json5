@@ -1,0 +1,124 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
+    'helpers:pinGitHubActionDigests',
+  ],
+  commitMessagePrefix: 'chore(deps):',
+  timezone: 'Europe/Berlin',
+  prHourlyLimit: 0,
+  prConcurrentLimit: 0,
+  automerge: false,
+  enabledManagers: [
+    'github-actions',
+    'dockerfile',
+    'pip_requirements',
+  ],
+
+  pip_requirements: {
+    managerFilePatterns: [
+      '/^docker/parsedmarc/requirements\\.txt$/',
+    ],
+  },
+
+  packageRules: [
+    {
+      // ===========================================================================
+      // XXXXX
+      // ===========================================================================  
+      matchManagers: [
+        'pip_requirements',
+      ],
+      labels: [
+        'dependencies',
+        'apps',
+      ],
+      draftPR: true,
+      additionalBranchPrefix: 'github_action/',
+      branchTopic: '{{depNameSanitized}}-{{#if newVersion}}{{newVersion}}{{else}}{{currentValue}}-{{newDigest}}{{/if}}',
+      commitMessageTopic: '{{depName}}',
+      commitMessageExtra: '{{#if newVersion}}from {{currentVersion}} to {{newVersion}}{{else}}{{newValue}} from {{currentDigestShort}} to {{newDigestShort}}{{/if}}',
+    },
+    {
+      // ===========================================================================
+      // Aktiviert Renovate-Regeln für Docker-basierte Dependencies
+      // ===========================================================================  
+      matchCategories: [
+        'docker',
+      ],
+      enabled: true,
+    },
+    {
+      // ===========================================================================
+      // GitHub Actions
+      // ===========================================================================  
+      matchManagers: [
+        'github-actions',
+      ],
+      matchPackageNames: [
+        '*',
+      ],
+      labels: [
+        'dependencies',
+        'github_actions',
+      ],
+      draftPR: true,
+      additionalBranchPrefix: 'github_action/',
+      branchTopic: '{{depNameSanitized}}-{{#if newVersion}}{{newVersion}}{{else}}{{currentValue}}-{{newDigest}}{{/if}}',
+      commitMessageTopic: '{{depName}}',
+      commitMessageExtra: '{{#if newVersion}}from {{currentVersion}} to {{newVersion}}{{else}}{{newValue}} from {{currentDigestShort}} to {{newDigestShort}}{{/if}}',
+    },
+    {
+      // ===========================================================================
+      // Docker Repository - Pyhton, Geoipupdate, Nginx, Apline
+      // =========================================================================== 
+      matchDatasources: [
+        'docker',
+      ],
+      matchPackageNames: [
+        'python',
+        'ghcr.io/maxmind/geoipupdate',
+        'nginx',
+        'alpine',
+        'wydler/logrotate',
+      ],
+      versioning: 'docker',
+      ignoreUnstable: true,
+      pinDigests: true,
+      labels: [
+        'dependencies',
+        'docker',
+      ],
+      draftPR: true,
+      additionalBranchPrefix: 'docker/',
+      branchTopic: '{{depNameSanitized}}-{{#if newVersion}}{{newVersion}}{{else}}{{currentValue}}-{{newDigest}}{{/if}}',
+      commitMessageTopic: '{{depName}}',
+      commitMessageExtra: '{{#if newVersion}}from {{currentVersion}} to {{newVersion}}{{else}}{{newValue}} from {{currentDigestShort}} to {{newDigestShort}}{{/if}}',
+    },
+    {
+      // ===========================================================================
+      // Docker Repository - Elasticsearch und Kibana
+      // =========================================================================== 
+      matchDatasources: [
+        'docker',
+      ],
+      matchPackageNames: [
+        'docker.elastic.co/elasticsearch/elasticsearch',
+        'docker.elastic.co/kibana/kibana',
+      ],
+      versioning: 'docker',
+      ignoreUnstable: true,
+      pinDigests: true,
+      labels: [
+        'dependencies',
+        'docker',
+      ],
+      allowedVersions: '<9.0.0',
+      draftPR: true,
+      additionalBranchPrefix: 'docker/',
+      branchTopic: '{{depNameSanitized}}-{{#if newVersion}}{{newVersion}}{{else}}{{currentValue}}-{{newDigest}}{{/if}}',
+      commitMessageTopic: '{{depName}}',
+      commitMessageExtra: '{{#if newVersion}}from {{currentVersion}} to {{newVersion}}{{else}}{{newValue}} from {{currentDigestShort}} to {{newDigestShort}}{{/if}}',
+    },
+  ],
+}
