@@ -1,0 +1,48 @@
+---
+name: Tools - Renovate
+
+"on":
+  schedule:
+    - cron: "0 6 * * *"  # jeden Tag um 06:00 Uhr
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        type: choice 
+        required: false
+        options: 
+          - info
+          - debug
+        default: "info"
+
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate app token
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        id: generate-token
+        with:
+          client-id: ${{ secrets.GH_APP_RDP_ID }}
+          private-key: ${{ secrets.GH_APP_RDP_PRIVATE_KEY }}
+          
+      - name: Run Renovate
+        uses: renovatebot/github-action@83ec54fee49ab67d9cd201084c1ff325b4b462e4  # v46.1.10
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          # token: ${{ secrets.GH_TOKEN }}
+        env:
+          LOG_LEVEL: ${{ inputs.logLevel || 'info' }}
+          # Repository taken from variable to keep configuration file generic
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
+          # This flag will stop renovate from trying to create an onboarding PR, instead it will look for renovate.json file and run
+          RENOVATE_ONBOARDING: "false"
+          RENOVATE_DEPENDENCY_DASHBOARD_AUTOCLOSE: "true"
+          RENOVATE_DEPENDENCY_DASHBOARD_TITLE: "Renovate Dependency Dashboard"
