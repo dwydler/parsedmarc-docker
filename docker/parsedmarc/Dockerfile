@@ -1,5 +1,5 @@
 # Reference image
-FROM python:3.14.3-slim
+FROM python:3.15.0a8-slim
 
 # Metadata
 LABEL maintainer="Daniel Wydler"
