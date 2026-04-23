@@ -15,7 +15,7 @@ This is a port of the native [parsedmarc application](https://github.com/domaina
 ## Install Docker, download containers und configure parsedmarc
 1. This script will install docker and containerd:
   ```
-  curl https://raw.githubusercontent.com/dwydler/parsedmarc-docker/master/misc/02-docker.io-installation.sh | bash
+  curl https://raw.githubusercontent.com/wydler/parsedmarc-docker/master/misc/02-docker.io-installation.sh | bash
   ```
 2. For IPv6 support, edit the Docker daemon configuration file, located at /etc/docker/daemon.json. Configure the following parameters and run `systemctl restart docker.service` to restart docker:
   ```
@@ -26,7 +26,7 @@ This is a port of the native [parsedmarc application](https://github.com/domaina
   ```
 3. Clone the repository to the correct folder for docker container:
   ```
-  git clone https://github.com/dwydler/parsedmarc-docker.git /opt/containers/parsedmarc-docker
+  git clone https://github.com/wydler/parsedmarc-docker.git /opt/containers/parsedmarc-docker
   git -C /opt/containers/parsedmarc-docker checkout $(git -C /opt/containers/parsedmarc-docker tag | tail -1)
   ```
 4. Change the ownership for the elasticsearch data directory:
