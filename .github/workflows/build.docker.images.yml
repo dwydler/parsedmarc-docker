@@ -52,9 +52,6 @@ jobs:
           - image: elasticsearch
             dockerfile: elasticsearch
 
-          - image: geoipupdate
-            dockerfile: geoipupdate
-
           - image: kibana
             dockerfile: kibana
 
