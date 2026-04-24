@@ -29,17 +29,6 @@ updates:
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "docker"
-    directory: "/docker/geoipupdate/"
-    schedule:
-      interval: "weekly"
-      timezone: "Europe/Berlin"
-      day: "saturday"
-      time: "05:00"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
-
-  - package-ecosystem: "docker"
     directory: "/docker/parsedmarc/"
     schedule:
       interval: "weekly"
