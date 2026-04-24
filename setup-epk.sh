@@ -4,23 +4,6 @@ COPIEDFILES=0
 
 ######
 
-APPPATH=/opt/containers/parsedmarc-docker/data/parsedmarc
-FILE=parsedmarc.ini
-
-echo "Check if the file $FILE already exist.";
-if [ ! -f $APPPATH/$FILE ]; then
-    echo "File $FILE was created successfully.";
-    echo
-    /bin/cp $APPPATH/parsedmarc.ini.example $APPPATH/$FILE
-
-    COPIEDFILES=$((COPIEDFILES + 1))
-else
-    echo "File $FILE already exist!";
-    echo
-fi
-
-######
-
 APPPATH=/opt/containers/parsedmarc-docker
 FILE=docker-compose.yml
 
@@ -53,7 +36,7 @@ fi
 echo
 ######
 
-if [[ "$COPIEDFILES" -eq "3" ]]; then
+if [[ "$COPIEDFILES" -eq "2" ]]; then
     echo "Set random password for the user elastic.";
     password=$(/bin/tr -dc 'A-Za-z0-9!?%=' < /dev/urandom | /bin/head -c 20)
     /bin/sed -i 's/<your-elastic-password>/'$password'/g' /$APPPATH/$FILE
@@ -65,8 +48,6 @@ if [[ "$COPIEDFILES" -eq "3" ]]; then
     echo "Set random password for the user parsedmarc.";
     password=$(/bin/tr -dc 'A-Za-z0-9!?=' < /dev/urandom | /bin/head -c 20)
     /bin/sed -i 's/<your-parsedmarc-password>/'$password'/g' /$APPPATH/$FILE
-    /bin/sed -i 's/<your-parsedmarc-password>/'$password'/g' /$APPPATH/data/parsedmarc/parsedmarc.ini
-fi
 
 
 echo
