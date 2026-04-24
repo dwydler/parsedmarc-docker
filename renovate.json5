@@ -70,14 +70,13 @@
     },
     {
       // ===========================================================================
-      // Docker Repository - Pyhton, Geoipupdate, Nginx, Apline
+      // Docker Repository - Pyhton, Nginx, Apline
       // =========================================================================== 
       matchDatasources: [
         'docker',
       ],
       matchPackageNames: [
         'python',
-        'ghcr.io/maxmind/geoipupdate',
         'nginx',
         'alpine',
         'wydler/logrotate',
