@@ -140,7 +140,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
       - "./data/parsedmarc/logs/:/var/log/parsedmarc/:rw"
-    command: parsedmarc -c /etc/parsedmarc.ini --debug
+    command: parsedmarc --debug
     networks:
       - parsedmarc-network
     healthcheck:
