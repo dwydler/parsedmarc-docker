@@ -161,25 +161,6 @@ services:
         condition: service_healthy
 
 
-  geoipupdate:
-    container_name: "epk-geoipupdate"
-    image: "wydler/parsedmarc-geoipupdate:${DH_CONTAINER_TAG}"
-    restart: unless-stopped
-    environment:
-      - GEOIPUPDATE_ACCOUNT_ID=${GEOIPUPDATE_ACCOUNT_ID}
-      - GEOIPUPDATE_LICENSE_KEY=${GEOIPUPDATE_LICENSE_KEY}
-      - GEOIPUPDATE_EDITION_IDS=${GEOIPUPDATE_EDITION_IDS}
-      - GEOIPUPDATE_FREQUENCY=${GEOIPUPDATE_FREQUENCY}
-    networks:
-      - parsedmarc-network
-    volumes:
-      - "/etc/timezone:/etc/timezone:ro"
-      - "/etc/localtime:/etc/localtime:ro"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-
-      - "./data/geoipupdate/:/usr/share/GeoIP:rw"
-
-
   logrotate:
     container_name: "epk-logrotate"
     image: "wydler/parsedmarc-logrotate:${DH_CONTAINER_TAG}"
