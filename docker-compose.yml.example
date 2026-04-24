@@ -139,7 +139,6 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-      - "./data/parsedmarc/parsedmarc.ini:/etc/parsedmarc.ini:ro"
       - "./data/parsedmarc/logs/:/var/log/parsedmarc/:rw"
     command: parsedmarc -c /etc/parsedmarc.ini --debug
     networks:
