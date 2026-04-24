@@ -163,6 +163,9 @@ services:
       PARSEDMARC_GENERAL_LOG_FILE:          "/var/log/parsedmarc/parsedmarc.log"
       PARSEDMARC_GENERAL_SILENT:            "False"
       PARSEDMARC_GENERAL_DEBUG:             "True"
+
+      # https://ipinfo.io/dashboard/downloads
+      PARSEDMARC_GENERAL_IPINFO_URL:        "https://ipinfo.io/data/ipinfo_lite.mmdb?_src=frontend&token=<token> 
       PARSEDMARC_GENERAL_IPINFO_API_TOKEN:  "<token>"
 
       PARSEDMARC_MAILBOX_REPORTS_FOLDER:    "INBOX"
