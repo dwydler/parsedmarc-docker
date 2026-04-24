@@ -48,6 +48,7 @@ if [[ "$COPIEDFILES" -eq "2" ]]; then
     echo "Set random password for the user parsedmarc.";
     password=$(/bin/tr -dc 'A-Za-z0-9!?=' < /dev/urandom | /bin/head -c 20)
     /bin/sed -i 's/<your-parsedmarc-password>/'$password'/g' /$APPPATH/$FILE
+fi
 
 
 echo
