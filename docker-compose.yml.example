@@ -139,9 +139,8 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-      - "./data/parsedmarc/parsedmarc.ini:/etc/parsedmarc.ini:ro"
       - "./data/parsedmarc/logs/:/var/log/parsedmarc/:rw"
-    command: parsedmarc -c /etc/parsedmarc.ini --debug
+    command: parsedmarc --debug
     networks:
       - parsedmarc-network
     healthcheck:
@@ -156,6 +155,36 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
+    environment:
+      # https://domainaware.github.io/parsedmarc/usage.html#environment-variable-configuration
+      PARSEDMARC_GENERAL_SAVE_AGGREGATE: "True"
+      PARSEDMARC_GENERAL_SAVE_FORENSIC: "True"
+      PARSEDMARC_GENERAL_SAVE_SMTP_TLS: "True"
+      PARSEDMARC_GENERAL_LOG_FILE: "/var/log/parsedmarc/parsedmarc.log"
+      PARSEDMARC_GENERAL_SILENT: "False"
+      PARSEDMARC_GENERAL_DEBUG: "True"
+
+      # https://ipinfo.io/dashboard/downloads
+      PARSEDMARC_GENERAL_IPINFO_URL: "https://ipinfo.io/data/ipinfo_lite.mmdb?_src=frontend&token=<token>"
+      PARSEDMARC_GENERAL_IPINFO_API_TOKEN: "<token>"
+
+      PARSEDMARC_MAILBOX_REPORTS_FOLDER: "INBOX"
+      PARSEDMARC_MAILBOX_ARCHIVE_FOLDER: "parsedmarc"
+      PARSEDMARC_MAILBOX_WATCH: "True"
+      PARSEDMARC_MAILBOX_TEST: "False"
+      PARSEDMARC_MAILBOX_CHECK_TIMEOUT: 30
+      PARSEDMARC_MAILBOX_BATCH_SIZE: 250
+
+      PARSEDMARC_IMAP_HOST: "<server.domain.de>"
+      PARSEDMARC_IMAP_PORT: "993"
+      PARSEDMARC_IMAP_SSL: "True"
+      PARSEDMARC_IMAP_USER: "dmarc@server.domain.de"
+      PARSEDMARC_IMAP_PASSWORD: "<password>"
+
+      PARSEDMARC_ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+      PARSEDMARC_ELASTICSEARCH_SSL: "False"
+      PARSEDMARC_ELASTICSEARCH_USER: "parsedmarc"
+      PARSEDMARC_ELASTICSEARCH_PASSWORD: "${PARSEDMARC_PASSWORD}"
 
 
   logrotate:
