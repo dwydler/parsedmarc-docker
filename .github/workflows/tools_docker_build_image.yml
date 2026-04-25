@@ -8,6 +8,7 @@ name: Tools - Docker Build Test
       - "master"
     paths:
       - '**Dockerfile'
+      - 'docker/parsedmarc/requirements.txt'
 
 permissions:
   contents: read
