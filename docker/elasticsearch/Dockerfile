@@ -1,5 +1,5 @@
 # Reference image
-FROM docker.elastic.co/elasticsearch/elasticsearch:8.19.14@sha256:9bfb5cbb6a72174fa7fa64949a5d7824dfa51c40e455118d7337206200ee916e
+FROM docker.elastic.co/elasticsearch/elasticsearch:8.19.15@sha256:aeda96cd85b0cadeb3a3b900789f3b85e902c994052dadbaf8dd99a539e2ef93
 
 # Metadata
 LABEL maintainer="Daniel Wydler"
